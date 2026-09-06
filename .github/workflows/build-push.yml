@@ -31,6 +31,9 @@ jobs:
           podman build \
             -f Containerfile \
             --platform linux/amd64 \
+            --layers \
+            --cache-from "${IMAGE}/cache" \
+            --cache-to "${IMAGE}/cache" \
             -t "${IMAGE}:latest" \
             -t "${IMAGE}:sha-${{ steps.vars.outputs.sha }}" \
             .
