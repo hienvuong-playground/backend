@@ -1,0 +1,20 @@
+name: GHCR Cleanup
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    permissions:
+      packages: write
+    steps:
+      - name: Clean up old images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          packages: backend
+          keep-n-tagged: 5
+          delete-untagged: true
+          token: ${{ secrets.GITHUB_TOKEN }}
