@@ -1,0 +1,41 @@
+name: Build and Push Image
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  IMAGE: ghcr.io/hienvuong-playground/backend
+
+jobs:
+  build-push:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set short SHA
+        id: vars
+        run: echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to ghcr.io
+        run: podman login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Build image
+        run: |
+          podman build \
+            -f Containerfile \
+            --platform linux/amd64 \
+            -t "${IMAGE}:latest" \
+            -t "${IMAGE}:sha-${{ steps.vars.outputs.sha }}" \
+            .
+
+      - name: Push image
+        run: |
+          podman push "${IMAGE}:latest"
+          podman push "${IMAGE}:sha-${{ steps.vars.outputs.sha }}"
