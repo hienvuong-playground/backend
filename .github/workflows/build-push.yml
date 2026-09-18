@@ -8,12 +8,13 @@ on:
 env:
   ACR_NAME: acrplayground
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-push:
     runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout
