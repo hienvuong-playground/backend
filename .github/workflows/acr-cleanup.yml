@@ -36,12 +36,12 @@ jobs:
         run: |
          az acr run \
           --registry ${{ env.ACR_NAME }} \
-          --cmd 'acr purge --filter "backend:.*" --ago 0d --keep 5' \
+          --cmd 'acr purge --filter "backend:.*" --ago 0d --keep 5 --untagged' \
           /dev/null
 
       - name: Cleanup old caches
         run: |
          az acr run \
           --registry ${{ env.ACR_NAME }} \
-          --cmd 'acr purge --filter "backend/cache:.*" --ago 3d' \
+          --cmd 'acr purge --filter "backend/cache:.*" --ago 3d --untagged' \
           /dev/null
