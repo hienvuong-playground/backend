@@ -1,12 +1,16 @@
-name: GHCR Cleanup
+name: ACR Cleanup
  
 on:
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 env:
   ACR_NAME: acrhienplayground
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   cleanup:
