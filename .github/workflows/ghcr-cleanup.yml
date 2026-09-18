@@ -5,14 +5,39 @@ on:
     - cron: '0 0 * * 1'
   workflow_dispatch:
 
+env:
+  ACR_NAME: acrhienplayground
+
 jobs:
   cleanup:
     runs-on: ubuntu-24.04
     steps:
-      - name: Clean up old images
-        uses: dataaxiom/ghcr-cleanup-action@v1
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Azure Login
+        uses: azure/login@v3
         with:
-          packages: backend
-          keep-n-tagged: 5
-          delete-untagged: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Azure Container Registry Login
+        run: az acr login --name ${{ env.ACR_NAME }}
+      
+      - name: Set image name
+        run: echo "IMAGE=${{ env.ACR_NAME }}.azurecr.io/backend" >> "$GITHUB_ENV"
+
+      - name: Cleanup images
+        run: |
+         az acr run \
+          --registry ${{ env.ACR_NAME }} \
+          --cmd 'acr purge --filter "backend:.*" --ago 0d --keep 5' \
+          /dev/null
+
+      - name: Cleanup old caches
+        run: |
+         az acr run \
+          --registry ${{ env.ACR_NAME }} \
+          --cmd 'acr purge --filter "backend/cache:.*" --ago 3d' \
+          /dev/null
