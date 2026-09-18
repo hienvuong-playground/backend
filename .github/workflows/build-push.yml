@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE: ghcr.io/hienvuong-playground/backend
+  ACR_NAME: acrplayground
 
 jobs:
   build-push:
@@ -23,8 +23,18 @@ jobs:
         id: vars
         run: echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
-      - name: Log in to ghcr.io
-        run: podman login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"
+      - name: Azure Login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Azure Container Registry Login
+        run: az acr login --name ${{ env.ACR_NAME }}
+      
+      - name: Set image name
+        run: echo "IMAGE=${{ env.ACR_NAME }}.azurecr.io/backend" >> "$GITHUB_ENV"
 
       - name: Build image
         run: |
