@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ACR_NAME: acrplayground
+  ACR_NAME: acrhienplayground
 
 permissions:
   id-token: write
