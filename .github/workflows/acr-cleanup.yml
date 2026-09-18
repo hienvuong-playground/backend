@@ -1,5 +1,5 @@
 name: ACR Cleanup
- 
+
 on:
   schedule:
     - cron: '0 0 * * *'
