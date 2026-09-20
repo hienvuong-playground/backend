@@ -21,6 +21,9 @@ spec:
         image: acrhienplayground.azurecr.io/backend:latest
         ports:
         - containerPort: 3001
+        envFrom:
+        - secretRef:
+            name: app-secrets
         volumeMounts:
         - name: secrets
           mountPath: "/mnt/secrets-store"
