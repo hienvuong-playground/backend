@@ -3,4 +3,4 @@ kind: Kustomization
 namespace: ${target_namespace}
 resources:
   - deployment.yaml
-  - csi.yaml
+  - secret-provider-class.yaml
