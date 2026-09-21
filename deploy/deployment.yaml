@@ -15,23 +15,23 @@ spec:
         app: backend
         azure.workload.identity/use: "true"
     spec:
-      serviceAccountName: backend-workload
+      # serviceAccountName: backend-workload
       containers:
       - name: backend
         image: acrhienplayground.azurecr.io/backend:latest
         ports:
         - containerPort: 3001
-        envFrom:
-        - secretRef:
-            name: app-secrets
-        volumeMounts:
-        - name: secrets
-          mountPath: "/mnt/secrets-store"
-          readOnly: true
-      volumes:
-        - name: secrets
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: "keyvault"
+        # envFrom:
+        # - secretRef:
+        #     name: app-secrets
+        # volumeMounts:
+        # - name: secrets
+        #   mountPath: "/mnt/secrets-store"
+        #   readOnly: true
+      # volumes:
+      #   - name: secrets
+      #     csi:
+      #       driver: secrets-store.csi.k8s.io
+      #       readOnly: true
+      #       volumeAttributes:
+      #         secretProviderClass: "keyvault"
