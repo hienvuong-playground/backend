@@ -4,3 +4,4 @@ namespace: backend
 resources:
   - deployment.yaml
   - secret-provider-class.yaml
+  - service-account.yaml
