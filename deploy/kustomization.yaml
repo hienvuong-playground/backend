@@ -3,4 +3,4 @@ kind: Kustomization
 namespace: backend
 resources:
   - deployment.yaml
-  # - secret-provider-class.yaml
+  - secret-provider-class.yaml
