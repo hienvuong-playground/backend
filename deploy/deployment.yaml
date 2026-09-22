@@ -5,7 +5,8 @@ metadata:
   labels:
     app: backend
 spec:
-  replicas: 1
+  # replicas is intentionally unset — the KEDA ScaledObject/HPA (see scaling.yaml)
+  # owns the replica count. Setting it here would make Flux revert scale-ups.
   selector:
     matchLabels:
       app: backend

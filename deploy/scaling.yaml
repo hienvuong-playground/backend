@@ -1,0 +1,38 @@
+# Tells the KEDA HTTP interceptor how to route to the backend and what metric to
+# scale on. Only traffic sent through the interceptor proxy
+# (keda-add-ons-http-interceptor-proxy.keda:8080) with a matching Host header is
+# counted toward scaling.
+apiVersion: http.keda.sh/v1beta1
+kind: InterceptorRoute
+metadata:
+  name: backend
+spec:
+  target:
+    service: backend-service
+    port: 3001
+  rules:
+    - hosts:
+        - backend.internal
+  scalingMetric:
+    requestRate:
+      targetValue: 5
+      window: 1m
+      granularity: 1s
+---
+# The KEDA control hook that actually changes the Deployment's replica count.
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: backend
+spec:
+  scaleTargetRef:
+    name: backend
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  cooldownPeriod: 60
+  pollingInterval: 30
+  triggers:
+    - type: external-push
+      metadata:
+        scalerAddress: keda-add-ons-http-external-scaler.keda:9090
+        interceptorRoute: backend
