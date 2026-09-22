@@ -28,7 +28,7 @@ spec:
   scaleTargetRef:
     name: backend
   minReplicaCount: 1
-  maxReplicaCount: 10
+  maxReplicaCount: 5
   cooldownPeriod: 60
   pollingInterval: 30
   triggers:
