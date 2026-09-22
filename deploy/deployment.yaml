@@ -36,3 +36,16 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: "keyvault"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
