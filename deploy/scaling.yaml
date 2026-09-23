@@ -1,21 +1,21 @@
-# The KEDA control hook that changes the Deployment's replica count. KEDA core is
-# provided by the AKS managed add-on (workload_autoscaler_profile.keda_enabled);
-# there is no self-installed KEDA or HTTP add-on. We scale on the backend's HTTP
-# request rate read from Prometheus (fed by the OTel auto-instrumentation pipeline).
-apiVersion: keda.sh/v1alpha1
-kind: ScaledObject
-metadata:
-  name: backend
-spec:
-  scaleTargetRef:
-    name: backend
-  minReplicaCount: 1
-  maxReplicaCount: 5
-  cooldownPeriod: 60
-  pollingInterval: 30
-  triggers:
-    - type: prometheus
-      metadata:
-        serverAddress: http://prometheus-server.observability.svc.cluster.local
-        query: sum(rate(http_server_duration_milliseconds_count{service_name="backend"}[1m]))
-        threshold: "5"
+# # The KEDA control hook that changes the Deployment's replica count. KEDA core is
+# # provided by the AKS managed add-on (workload_autoscaler_profile.keda_enabled);
+# # there is no self-installed KEDA or HTTP add-on. We scale on the backend's HTTP
+# # request rate read from Prometheus (fed by the OTel auto-instrumentation pipeline).
+# apiVersion: keda.sh/v1alpha1
+# kind: ScaledObject
+# metadata:
+#   name: backend
+# spec:
+#   scaleTargetRef:
+#     name: backend
+#   minReplicaCount: 1
+#   maxReplicaCount: 5
+#   cooldownPeriod: 60
+#   pollingInterval: 30
+#   triggers:
+#     - type: prometheus
+#       metadata:
+#         serverAddress: http://prometheus-server.observability.svc.cluster.local
+#         query: sum(rate(http_server_duration_milliseconds_count{service_name="backend"}[1m]))
+#         threshold: "5"
