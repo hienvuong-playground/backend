@@ -16,6 +16,6 @@ spec:
   triggers:
     - type: prometheus
       metadata:
-        serverAddress: http://prometheus-server.observability.svc.cluster.local:9090
+        serverAddress: http://prometheus-server.observability.svc.cluster.local
         query: sum(rate(http_server_duration_milliseconds_count{service_name="backend"}[1m]))
         threshold: "5"
