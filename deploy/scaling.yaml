@@ -1,25 +1,7 @@
-# Tells the KEDA HTTP interceptor how to route to the backend and what metric to
-# scale on. Only traffic sent through the interceptor proxy
-# (keda-add-ons-http-interceptor-proxy.keda:8080) with a matching Host header is
-# counted toward scaling.
-apiVersion: http.keda.sh/v1beta1
-kind: InterceptorRoute
-metadata:
-  name: backend
-spec:
-  target:
-    service: backend-service
-    port: 3001
-  rules:
-    - hosts:
-        - backend.internal
-  scalingMetric:
-    requestRate:
-      targetValue: 5
-      window: 1m
-      granularity: 1s
----
-# The KEDA control hook that actually changes the Deployment's replica count.
+# The KEDA control hook that changes the Deployment's replica count. KEDA core is
+# provided by the AKS managed add-on (workload_autoscaler_profile.keda_enabled);
+# there is no self-installed KEDA or HTTP add-on. We scale on the backend's HTTP
+# request rate read from Prometheus (fed by the OTel auto-instrumentation pipeline).
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
@@ -32,7 +14,8 @@ spec:
   cooldownPeriod: 60
   pollingInterval: 30
   triggers:
-    - type: external-push
+    - type: prometheus
       metadata:
-        scalerAddress: keda-add-ons-http-external-scaler.keda:9090
-        interceptorRoute: backend
+        serverAddress: http://prometheus-server.observability.svc.cluster.local:9090
+        query: sum(rate(http_server_duration_milliseconds_count{service_name="backend"}[1m]))
+        threshold: "5"
