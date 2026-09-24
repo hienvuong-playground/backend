@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: consumer-scaledobject
+spec:
+  scaleTargetRef:
+    name: consumer
+  minReplicaCount: 0
+  maxReplicaCount: 10
+  pollingInterval: 15
+  cooldownPeriod: 60        # wait before scaling back to 0
+  triggers:
+    - type: azure-servicebus
+      metadata:
+        queueName: sbq-playground
+        messageCount: "10"
+      authenticationRef:
+        name: azure-servicebus-auth
+        kind: ClusterTriggerAuthentication

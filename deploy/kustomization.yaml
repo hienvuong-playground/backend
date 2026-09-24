@@ -5,4 +5,6 @@ resources:
   - deployment.yaml
   - secret-provider-class.yaml
   - service-account.yaml
-  - scaling.yaml
+  - backend-scaling.yaml
+  - consumer.yaml
+  - consumer-scaling.yaml
