@@ -17,5 +17,14 @@ spec:
     - type: prometheus
       metadata:
         serverAddress: http://prometheus-server.observability.svc.cluster.local
-        query: sum(rate(http_server_duration_milliseconds_count{service_name="backend"}[1m]))
+        # The OTel prometheusremotewrite exporter maps service.name onto the
+        # Prometheus `job` label as "<service.namespace>/<service.name>"
+        # (here backend/backend) — there is no `service_name` label. Filtering on
+        # service_name matched zero series, so KEDA read 0 and never scaled.
+        #
+        # Window is [2m], NOT [1m]: the backend's OTel SDK exports metrics every
+        # 60s, so a 1m rate window usually spans only one sample and rate()
+        # returns nothing. [2m] guarantees >=2 samples. (To go back to [1m], first
+        # drop OTEL_METRIC_EXPORT_INTERVAL to ~15s on the backend.)
+        query: sum(rate(http_server_duration_milliseconds_count{job="backend/backend"}[2m]))
         threshold: "5"
