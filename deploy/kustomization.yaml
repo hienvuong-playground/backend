@@ -8,3 +8,4 @@ resources:
   - backend-scaling.yaml
   - consumer.yaml
   - consumer-scaling.yaml
+  - keda-sb-authen.yaml
