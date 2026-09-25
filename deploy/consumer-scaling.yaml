@@ -16,4 +16,3 @@ spec:
         messageCount: "10"
       authenticationRef:
         name: azure-servicebus-auth
-        kind: ClusterTriggerAuthentication
