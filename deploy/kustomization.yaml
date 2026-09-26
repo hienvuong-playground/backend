@@ -10,4 +10,4 @@ resources:
   - consumer-scaling.yaml
   - keda-sb-authen.yaml
   - vpa.yaml
-  - temp-https-app.yaml
+  - httproute.yaml
