@@ -34,7 +34,7 @@ spec:
       volumes:
       - name: tls
         secret:
-          secretName: www-tls
+          secretName: wildcard-tls
 
 ---
 # service.yaml
