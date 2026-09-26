@@ -7,7 +7,7 @@ spec:
     name: consumer
   minReplicaCount: 0
   maxReplicaCount: 10
-  pollingInterval: 15
+  pollingInterval: 30
   cooldownPeriod: 60        # wait before scaling back to 0
   triggers:
     - type: azure-servicebus

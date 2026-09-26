@@ -9,3 +9,4 @@ resources:
   - consumer.yaml
   - consumer-scaling.yaml
   - keda-sb-authen.yaml
+  - vpa.yaml
