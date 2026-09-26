@@ -50,8 +50,8 @@ metadata:
 spec:
   selector:
     app: backend
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - protocol: TCP
-      port: 443
+      port: 3001
       targetPort: 3001
