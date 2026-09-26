@@ -23,6 +23,6 @@ spec:
             - name: MESSAGE_COUNT
               value: "10"
             - name: AZURE_SERVICEBUS_QUEUE_NAME
-              value: sbq-playground
+              value: ${SERVICE_BUS_QUEUE}
             - name: AZURE_SERVICEBUS_HOSTNAME
-              value: sbns-playground-gw2y5h.servicebus.windows.net
+              value: ${SERVICE_BUS_HOSTNAME}

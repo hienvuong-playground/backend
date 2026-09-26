@@ -12,8 +12,8 @@ spec:
   triggers:
     - type: azure-servicebus
       metadata:
-        namespace: sbns-playground-gw2y5h
-        queueName: sbq-playground
+        namespace: ${SERVICE_BUS_NAMESPACE}
+        queueName: ${SERVICE_BUS_QUEUE}
         messageCount: "10"
       authenticationRef:
         name: azure-servicebus-auth

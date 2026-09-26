@@ -28,4 +28,3 @@ spec:
         # drop OTEL_METRIC_EXPORT_INTERVAL to ~15s on the backend.)
         query: sum(rate(http_server_duration_milliseconds_count{job="backend/backend"}[2m]))
         threshold: "5"
-
