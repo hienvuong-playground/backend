@@ -35,6 +35,15 @@ spec:
         - name: secrets
           mountPath: "/mnt/secrets-store"
           readOnly: true
+        - name: tls
+          mountPath: /etc/tls
+          readOnly: true
+        env:
+        - name: TLS_CERT
+          value: /etc/tls/tls.crt
+        - name: TLS_KEY
+          value: /etc/tls/tls.key
+
       volumes:
         - name: secrets
           csi:
@@ -42,6 +51,9 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: "keyvault"
+        - name: tls
+          secret:
+            secretName: www-tls
 ---
 apiVersion: v1
 kind: Service
