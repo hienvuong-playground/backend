@@ -28,9 +28,6 @@ spec:
         resources:
           requests:
             cpu: 50m
-        envFrom:
-        - secretRef:
-            name: app-secrets
         volumeMounts:
         - name: secrets
           mountPath: "/mnt/secrets-store"
