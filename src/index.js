@@ -16,6 +16,10 @@ app.get('/api/hello', (req, res) => {
   res.json({ message: `Hello from backend! Secret value: ${SECRET}, secret 2 value: ${SECRET_2}` });
 });
 
+app.get('/api/error', () => {
+  throw new Error('test error');
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   logger.info({ port: PORT }, 'backend started');
