@@ -2,15 +2,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: backend
 resources:
-  - deployment.yaml
-  - secret-provider-class.yaml
-  - service-account.yaml
-  - backend-scaling.yaml
-  - consumer.yaml
-  - consumer-scaling.yaml
-  - keda-sb-authen.yaml
-  - vpa.yaml
-  - httproute.yaml
+- deployment.yaml
+- secret-provider-class.yaml
+- service-account.yaml
+- backend-scaling.yaml
+- consumer.yaml
+- consumer-scaling.yaml
+- keda-sb-authen.yaml
+- vpa.yaml
+- httproute.yaml
 images:
-  - name: acrhienplayground.azurecr.io/backend
-    newTag: sha-319c981
+- name: acrhienplayground.azurecr.io/backend
+  newTag: sha-319c981
