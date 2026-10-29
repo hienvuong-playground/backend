@@ -11,3 +11,6 @@ resources:
   - keda-sb-authen.yaml
   - vpa.yaml
   - httproute.yaml
+images:
+  - name: acrhienplayground.azurecr.io/backend
+    newTag: sha-319c981

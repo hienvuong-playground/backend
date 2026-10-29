@@ -8,6 +8,10 @@ on:
 env:
   ACR_NAME: acrhienplayground
 
+concurrency:
+  group: build-push
+  cancel-in-progress: false
+
 permissions:
   id-token: write
   contents: read
@@ -37,6 +41,8 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
     runs-on: ubuntu-24.04
+    outputs:
+      tag: sha-${{ steps.vars.outputs.sha }}
 
     steps:
       - name: Checkout
@@ -75,3 +81,35 @@ jobs:
         run: |
           podman push "${IMAGE}:latest"
           podman push "${IMAGE}:sha-${{ steps.vars.outputs.sha }}"
+
+  update-manifest:
+    needs: build-push
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Set image tag
+        working-directory: deploy
+        run: kustomize edit set image "${{ env.ACR_NAME }}.azurecr.io/backend:${{ needs.build-push.outputs.tag }}"
+
+      - name: Open and merge PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.build-push.outputs.tag }}
+        run: |
+          git diff --quiet && exit 0
+          branch="deploy/backend-$TAG"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit -am "Deploy backend $TAG"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" --title "Deploy backend $TAG" --body "Image built from ${GITHUB_SHA}."
+          gh pr merge "$branch" --squash --delete-branch

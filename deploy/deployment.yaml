@@ -21,8 +21,7 @@ spec:
       serviceAccountName: backend-workload
       containers:
       - name: backend
-        image: acrhienplayground.azurecr.io/backend:latest
-        imagePullPolicy: Always
+        image: acrhienplayground.azurecr.io/backend
         ports:
         - containerPort: 3001
         resources:
