@@ -13,4 +13,4 @@ resources:
 - httproute.yaml
 images:
 - name: acrhienplayground.azurecr.io/backend
-  newTag: sha-319c981
+  newTag: sha-dd3d2e3
