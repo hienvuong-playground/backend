@@ -47,7 +47,7 @@ spec:
             - name: PGDATABASE
               value: ${POSTGRES_DB}
             - name: CORS_ORIGINS
-              value: "https://${STATIC_WEB_APP_HOST},https://${DOMAIN_NAME}"
+              value: "https://${STATIC_WEB_APP_HOST},https://www.${DOMAIN_NAME}"
           readinessProbe:
             httpGet:
               path: /readyz
