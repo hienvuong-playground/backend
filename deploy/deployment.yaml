@@ -19,18 +19,47 @@ spec:
         instrumentation.opentelemetry.io/inject-nodejs: "observability/instrumentation"
     spec:
       serviceAccountName: backend-workload
+      initContainers:
+        - name: database-setup
+          image: acrhienplayground.azurecr.io/backend
+          command: ["node", "db/bootstrap.js"]
+          env:
+            - name: PGSSLMODE
+              value: verify-full
+          volumeMounts:
+            - name: secrets
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
       containers:
-      - name: backend
-        image: acrhienplayground.azurecr.io/backend
-        ports:
-        - containerPort: 3001
-        resources:
-          requests:
-            cpu: 50m
-        volumeMounts:
-        - name: secrets
-          mountPath: "/mnt/secrets-store"
-          readOnly: true
+        - name: backend
+          image: acrhienplayground.azurecr.io/backend
+          ports:
+            - containerPort: 3001
+          env:
+            - name: PGSSLMODE
+              value: verify-full
+            - name: CORS_ORIGINS
+              value: "https://happy-field-0f388a803.3.azurestaticapps.net,https://playground.hienvuong.com"
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 6
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+          volumeMounts:
+            - name: secrets
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
       volumes:
         - name: secrets
           csi:
