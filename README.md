@@ -86,21 +86,16 @@ High availability is optional for this playground.
 Azure charges for this server, storage, and backups beyond the included allowance.
 Confirm the current regional price and quota before creation.
 
-Use the existing AKS cluster to run the API and the existing Key Vault for credentials.
-The current AKS configuration uses a managed network and load balancer outbound access.
-For the first deployment, allow only the AKS outbound public IP addresses in the Postgres firewall.
+Use the existing AKS cluster to run the API.
+The server is created by Terraform in `infra/cloud/postgres.tf` with Entra authentication only, so there is no password and no connection secret.
+The backend workload identity is the server's Entra administrator and logs in with an access token as the password.
+The deployment sets `PGHOST`, `PGUSER`, and `PGDATABASE`; `src/db/pool.js` fetches the token with `@azure/identity`.
+Public access is allowed for Azure services (firewall rule `0.0.0.0`); a private endpoint can replace it later.
 Keep verified TLS enabled with `PGSSLMODE=verify-full`.
-A private endpoint and VNet connection can replace public access in a later infrastructure step.
-Do not enable the firewall rule that permits all Azure services.
-
-Create the Key Vault secret `storefront-database-url` with the Postgres connection URI.
-Do not append `sslmode` or other TLS flags to that URI.
-Grant the existing backend identity `Key Vault Secrets User` access to that secret.
-The [secret provider](deploy/secret-provider-class.yaml) mounts it as `DATABASE_URL`.
 The API verifies the server certificate with the Node trust store.
 If Azure requires another root certificate, mount it and set `PGSSLROOTCERT` to its path.
 
-Create the server, database, firewall rules, secret, and secret access before you deploy these code changes.
+Apply the Terraform in `infra/cloud` and `infra/k8s/terraform` before you deploy these code changes.
 The [deployment](deploy/deployment.yaml) runs migration and seed commands in an init container before it starts the API.
 A migration applies each SQL file once and locks concurrent runs.
 The seed inserts missing sample IDs and keeps existing values.

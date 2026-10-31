@@ -26,10 +26,12 @@ spec:
           env:
             - name: PGSSLMODE
               value: verify-full
-          volumeMounts:
-            - name: secrets
-              mountPath: "/mnt/secrets-store"
-              readOnly: true
+            - name: PGHOST
+              value: ${POSTGRES_HOST}
+            - name: PGUSER
+              value: ${POSTGRES_USER}
+            - name: PGDATABASE
+              value: ${POSTGRES_DB}
       containers:
         - name: backend
           image: acrhienplayground.azurecr.io/backend
@@ -38,8 +40,14 @@ spec:
           env:
             - name: PGSSLMODE
               value: verify-full
+            - name: PGHOST
+              value: ${POSTGRES_HOST}
+            - name: PGUSER
+              value: ${POSTGRES_USER}
+            - name: PGDATABASE
+              value: ${POSTGRES_DB}
             - name: CORS_ORIGINS
-              value: "https://happy-field-0f388a803.3.azurestaticapps.net,https://playground.hienvuong.com"
+              value: "https://${STATIC_WEB_APP_HOST},https://${DOMAIN_NAME}"
           readinessProbe:
             httpGet:
               path: /readyz
