@@ -5,6 +5,9 @@ const { createApp } = require("../src/app");
 const { migrate } = require("../src/db/migrate");
 const { seed } = require("../src/db/seed");
 const sample = require("../src/data/catalog.json");
+const storefront = require("../src/data/storefront.json");
+
+const assetBaseUrl = "https://assets.example/assets";
 
 test("catalog API uses Postgres", async (t) => {
   assert.ok(
@@ -24,6 +27,7 @@ test("catalog API uses Postgres", async (t) => {
   });
   const server = createApp(pool, {
     origins: "https://storefront.example",
+    assetBaseUrl,
   }).listen(0, "127.0.0.1");
   await new Promise((resolve) => server.once("listening", resolve));
   const base = `http://127.0.0.1:${server.address().port}`;
@@ -56,10 +60,37 @@ test("catalog API uses Postgres", async (t) => {
         const { status, body } = await get("/api/catalog");
         assert.equal(status, 200);
         assert.equal(body.products.length, sample.length);
-        assert.deepEqual(body.products[0], sample[0]);
+        assert.deepEqual(body.products[0], {
+          ...sample[0],
+          image: `${assetBaseUrl}/${sample[0].image}`,
+        });
         assert.deepEqual(
           new Set(body.departments),
           new Set(sample.map((product) => product.category)),
+        );
+      },
+    );
+    await t.test(
+      "storefront returns ordered sections with image URLs",
+      async () => {
+        const { status, body } = await get("/api/storefront");
+        assert.equal(status, 200);
+        assert.deepEqual(
+          body.promos,
+          storefront.promos.map(({ position, ...promo }) => ({
+            ...promo,
+            image: `${assetBaseUrl}/${promo.image}`,
+          })),
+        );
+        assert.deepEqual(
+          body.categories,
+          storefront.categories.map(({ position, ...category }) => ({
+            ...category,
+            items: category.items.map((item) => ({
+              ...item,
+              image: `${assetBaseUrl}/${item.image}`,
+            })),
+          })),
         );
       },
     );

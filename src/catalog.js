@@ -20,10 +20,11 @@ function numberParameter(query, key, fallback, min, max, integer = false) {
   }
   return value;
 }
-function productFromRow(row) {
+function productFromRow(row, assetBaseUrl) {
   const { original_price, ...product } = row;
   return {
     ...product,
+    image: `${assetBaseUrl}/${row.image}`,
     price: Number(row.price),
     originalPrice: Number(original_price),
     rating: Number(row.rating),
@@ -35,7 +36,7 @@ const sorts = {
   "price-desc": "price DESC, id ASC",
   rating: "rating DESC, id ASC",
 };
-async function searchCatalog(pool, query) {
+async function searchCatalog(pool, query, assetBaseUrl) {
   const keyword = stringParameter(query, "k");
   const department = stringParameter(query, "department", "All", 80);
   const rating = numberParameter(query, "rating", 0, 0, 5);
@@ -75,7 +76,7 @@ async function searchCatalog(pool, query) {
     );
     await client.query("COMMIT");
     return {
-      products: rows.rows.map(productFromRow),
+      products: rows.rows.map((row) => productFromRow(row, assetBaseUrl)),
       total: count.rows[0].total,
       limit,
       offset,

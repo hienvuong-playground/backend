@@ -1,0 +1,216 @@
+{
+  "promos": [
+    {
+      "id": 1,
+      "position": 1,
+      "title": "Shop kitchen must-haves",
+      "image": "images/244bc356f07e.jpg",
+      "department": "Home & Kitchen"
+    },
+    {
+      "id": 2,
+      "position": 2,
+      "title": "Shop all things beauty",
+      "image": "images/77832b523c4c.jpg",
+      "department": "Beauty & Personal Care"
+    },
+    {
+      "id": 3,
+      "position": 3,
+      "title": "Start looking sharp",
+      "image": "images/d85f772ed95d.jpg",
+      "department": "Clothing, Shoes & Jewelry"
+    },
+    {
+      "id": 4,
+      "position": 4,
+      "title": "Toys for little ones",
+      "image": "images/64592f317959.jpg",
+      "department": "Toys & Games"
+    },
+    {
+      "id": 5,
+      "position": 5,
+      "title": "Level up your PC here",
+      "image": "images/ef626c060cf8.jpg",
+      "department": "Computers"
+    },
+    {
+      "id": 6,
+      "position": 6,
+      "title": "Discover books you can't put down",
+      "image": "images/26cc06f5a495.jpg",
+      "department": "Books"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "position": 1,
+      "title": "Plug in with our electronics",
+      "department": "Electronics",
+      "items": [
+        {
+          "label": "Headphones",
+          "image": "images/4f47902973c1.jpg",
+          "query": "Headphones"
+        },
+        {
+          "label": "Tablets",
+          "image": "images/edb607b83f92.jpg",
+          "query": "Tablets"
+        },
+        {
+          "label": "Gaming",
+          "image": "images/3baf4a9aed6b.jpg",
+          "query": "Gaming"
+        },
+        {
+          "label": "Speakers",
+          "image": "images/ddc59328f7f7.jpg",
+          "query": "Speakers"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "position": 2,
+      "title": "Score the top PCs & Accessories",
+      "department": "Computers",
+      "items": [
+        {
+          "label": "Desktops",
+          "image": "images/15441beca821.jpg",
+          "query": "Desktops"
+        },
+        {
+          "label": "Laptops",
+          "image": "images/2c0d1f5c68c2.jpg",
+          "query": "Laptops"
+        },
+        {
+          "label": "Hard Drives",
+          "image": "images/80f80b4f6d50.jpg",
+          "query": "Hard Drives"
+        },
+        {
+          "label": "PC Accessories",
+          "image": "images/ab42587b3d09.jpg",
+          "query": "PC Accessories"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "position": 3,
+      "title": "Gear up to get fit",
+      "department": "Sports & Outdoors",
+      "items": [
+        {
+          "label": "clothing",
+          "image": "images/bd6d5d6e1ecd.jpg",
+          "query": "fitness clothing"
+        },
+        {
+          "label": "trackers",
+          "image": "images/ea3e037810b4.jpg",
+          "query": "fitness trackers"
+        },
+        {
+          "label": "equipment",
+          "image": "images/8984c889083d.jpg",
+          "query": "fitness equipment"
+        },
+        {
+          "label": "Deals",
+          "image": "images/5dc5b779b2f8.jpg",
+          "query": "shop deals"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "position": 4,
+      "title": "Apparel under $25",
+      "department": "Clothing, Shoes & Jewelry",
+      "items": [
+        {
+          "label": "Women",
+          "image": "images/75bcaf1f61b8.jpg",
+          "query": "Women"
+        },
+        {
+          "label": "Men",
+          "image": "images/e844d21a846f.jpg",
+          "query": "Men"
+        },
+        {
+          "label": "Girls",
+          "image": "images/9ea864214dda.jpg",
+          "query": "Girls"
+        },
+        {
+          "label": "Boys",
+          "image": "images/214aa3bec9d7.jpg",
+          "query": "Boys"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "position": 5,
+      "title": "Fantastic Finds for Home",
+      "department": "Home & Kitchen",
+      "items": [
+        {
+          "label": "Kitchen",
+          "image": "images/1e2506e58f4e.jpg",
+          "query": "Kitchen"
+        },
+        {
+          "label": "Home Decor",
+          "image": "images/f0a4d81af9fe.jpg",
+          "query": "Home Decor"
+        },
+        {
+          "label": "Dining",
+          "image": "images/cf313ce3e8c3.jpg",
+          "query": "Dining"
+        },
+        {
+          "label": "Smart Home",
+          "image": "images/192b34070bc8.jpg",
+          "query": "Smart Home"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "position": 6,
+      "title": "Shine brighter with your fashion faves",
+      "department": "Clothing, Shoes & Jewelry",
+      "items": [
+        {
+          "label": "Jewelry",
+          "image": "images/0883452d06cd.jpg",
+          "query": "Jewelry"
+        },
+        {
+          "label": "Handbags",
+          "image": "images/56695c22f9c6.jpg",
+          "query": "Handbags"
+        },
+        {
+          "label": "Footwear",
+          "image": "images/d85dfdca4069.jpg",
+          "query": "Footwear"
+        },
+        {
+          "label": "Beauty",
+          "image": "images/e93386c06661.jpg",
+          "query": "Beauty"
+        }
+      ]
+    }
+  ]
+}

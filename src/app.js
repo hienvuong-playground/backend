@@ -9,8 +9,12 @@ function createApp(
   {
     origins = process.env.CORS_ORIGINS ||
       "http://127.0.0.1:5173,http://localhost:5173",
+    assetBaseUrl = process.env.ASSET_BASE_URL,
   } = {},
 ) {
+  if (!assetBaseUrl) throw new Error("ASSET_BASE_URL is not set");
+  const assetUrl = (key) => `${assetBaseUrl}/${key}`;
+  const toProduct = (row) => productFromRow(row, assetBaseUrl);
   const allowed = new Set(
     origins
       .split(",")
@@ -51,14 +55,37 @@ function createApp(
   app.get("/api/catalog", async (req, res) => {
     // Full snapshot for the small demo: home and local cart lookups.
     const rows = await pool.query("SELECT * FROM products ORDER BY id");
-    const products = rows.rows.map(productFromRow);
+    const products = rows.rows.map(toProduct);
     res.json({
       products,
       departments: [...new Set(products.map((product) => product.category))],
     });
   });
+  app.get("/api/storefront", async (req, res) => {
+    const [promos, categories] = await Promise.all([
+      pool.query(
+        "SELECT id, title, image, department FROM promos ORDER BY position, id",
+      ),
+      pool.query(
+        "SELECT id, title, department, items FROM categories ORDER BY position, id",
+      ),
+    ]);
+    res.json({
+      promos: promos.rows.map((promo) => ({
+        ...promo,
+        image: assetUrl(promo.image),
+      })),
+      categories: categories.rows.map((category) => ({
+        ...category,
+        items: category.items.map((item) => ({
+          ...item,
+          image: assetUrl(item.image),
+        })),
+      })),
+    });
+  });
   app.get("/api/products", async (req, res) =>
-    res.json(await searchCatalog(pool, req.query)),
+    res.json(await searchCatalog(pool, req.query, assetBaseUrl)),
   );
   app.get("/api/products/:id", async (req, res) => {
     if (
@@ -72,7 +99,7 @@ function createApp(
     ]);
     if (!result.rowCount)
       return res.status(404).json({ error: "Product not found." });
-    res.json({ product: productFromRow(result.rows[0]) });
+    res.json({ product: toProduct(result.rows[0]) });
   });
   app.use((req, res) =>
     res.status(404).json({ error: "API route not found." }),

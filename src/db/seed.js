@@ -1,5 +1,6 @@
 const { createPool } = require("./pool");
 const products = require("../data/catalog.json");
+const storefront = require("../data/storefront.json");
 
 async function seed(pool) {
   const client = await pool.connect();
@@ -26,6 +27,28 @@ async function seed(pool) {
           JSON.stringify(product.about),
           product.color,
           product.stock,
+        ],
+      );
+    }
+    for (const promo of storefront.promos) {
+      await client.query(
+        `INSERT INTO promos (id, position, title, image, department)
+        VALUES ($1,$2,$3,$4,$5)
+        ON CONFLICT (id) DO NOTHING`,
+        [promo.id, promo.position, promo.title, promo.image, promo.department],
+      );
+    }
+    for (const category of storefront.categories) {
+      await client.query(
+        `INSERT INTO categories (id, position, title, department, items)
+        VALUES ($1,$2,$3,$4,$5)
+        ON CONFLICT (id) DO NOTHING`,
+        [
+          category.id,
+          category.position,
+          category.title,
+          category.department,
+          JSON.stringify(category.items),
         ],
       );
     }
