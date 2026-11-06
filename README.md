@@ -36,7 +36,7 @@ From the frontend directory, run `npm run dev`.
 Vite forwards `/api` requests to `http://127.0.0.1:3001`.
 Leave `VITE_API_URL` empty for this local proxy.
 For a deployed frontend, set `VITE_API_URL` to the API origin before the build.
-The existing frontend workflow already sets `https://api.playground.hienvuong.com`.
+The existing frontend workflow already sets `https://api.hienvuong.com`.
 
 ## API routes
 
