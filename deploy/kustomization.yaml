@@ -5,10 +5,10 @@ resources:
 - deployment.yaml
 - secret-provider-class.yaml
 - service-account.yaml
-- backend-scaling.yaml
+# - backend-scaling.yaml
 - consumer.yaml
-- consumer-scaling.yaml
-- keda-sb-authen.yaml
+# - consumer-scaling.yaml
+# - keda-sb-authen.yaml
 - vpa.yaml
 - httproute.yaml
 images:
