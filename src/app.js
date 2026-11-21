@@ -29,7 +29,17 @@ function createApp(
         callback(null, !origin || allowed.has(origin)),
     }),
   );
-  app.use(pinoHttp({ logger }));
+  app.use(
+    pinoHttp({
+      logger,
+      customLogLevel: (req, res, error) => {
+        if (error || res.statusCode >= 500) return "error";
+        if (res.statusCode >= 400) return "warn";
+        if (req.path === "/livez" || req.path === "/readyz") return "debug";
+        return "info";
+      },
+    }),
+  );
   app.use("/api", (req, res, next) => {
     res.set("Cache-Control", "no-store");
     next();
@@ -51,6 +61,16 @@ function createApp(
   });
   app.get("/api/error", () => {
     throw new Error("test error");
+  });
+  app.get("/api/slow", async (req, res) => {
+    const delayMs = 1000 + Math.floor(Math.random() * 2000);
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
+    req.log.warn({ delayMs }, "slow response");
+    res.json({ delayMs });
+  });
+  app.get("/api/flaky", (req, res) => {
+    if (Math.random() < 0.2) throw new Error("random failure");
+    res.json({ status: "ok" });
   });
   app.get("/api/catalog", async (req, res) => {
     // Full snapshot for the small demo: home and local cart lookups.
@@ -84,9 +104,15 @@ function createApp(
       })),
     });
   });
-  app.get("/api/products", async (req, res) =>
-    res.json(await searchCatalog(pool, req.query, assetBaseUrl)),
-  );
+  app.get("/api/products", async (req, res) => {
+    req.log.trace({ query: req.query }, "search requested");
+    const result = await searchCatalog(pool, req.query, assetBaseUrl);
+    req.log.debug(
+      { total: result.total, returned: result.products.length },
+      "search finished",
+    );
+    res.json(result);
+  });
   app.get("/api/products/:id", async (req, res) => {
     if (
       !/^[1-9]\d*$/.test(req.params.id) ||

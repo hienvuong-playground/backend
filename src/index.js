@@ -5,6 +5,12 @@ const pool = createPool();
 pool.on("error", (error) =>
   logger.error({ code: error.code }, "database connection failed"),
 );
+for (const event of ["uncaughtException", "unhandledRejection"]) {
+  process.on(event, (error) => {
+    logger.fatal({ err: error }, event);
+    process.exit(1);
+  });
+}
 const port = process.env.PORT || 3001;
 const server = createApp(pool).listen(port, () =>
   logger.info({ port }, "backend started"),
