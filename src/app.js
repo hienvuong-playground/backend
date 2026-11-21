@@ -35,7 +35,7 @@ function createApp(
       customLogLevel: (req, res, error) => {
         if (error || res.statusCode >= 500) return "error";
         if (res.statusCode >= 400) return "warn";
-        if (req.path === "/livez" || req.path === "/readyz") return "debug";
+        if (req.path === "/livez" || req.path === "/readyz") return "silent";
         return "info";
       },
     }),
