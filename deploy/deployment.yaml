@@ -17,6 +17,8 @@ spec:
         azure.workload.identity/use: "true"
       annotations:
         instrumentation.opentelemetry.io/inject-nodejs: "observability/instrumentation"
+        # Already in OTelLogs via OTLP; keeps Container insights from storing it twice.
+        fluentbit.io/exclude-backend: "true"
     spec:
       serviceAccountName: backend-workload
       initContainers:
